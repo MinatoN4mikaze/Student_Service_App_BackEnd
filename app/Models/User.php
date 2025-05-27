@@ -22,7 +22,10 @@ class User extends Authenticatable
     {
          return $this->hasOne(Admin::class);
     }
-
+    public function studentObjection()
+    {
+        return $this->hasMany(StudentObjection::class);
+    }
     protected $hidden = [
         'password',
         'remember_token',
