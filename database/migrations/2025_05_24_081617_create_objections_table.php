@@ -11,10 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('objections', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
-        });
+       Schema::create('objections', function (Blueprint $table) {
+    $table->id();
+    $table->string('subject_name');
+       $table->timestamp('start_at')->nullable();
+        $table->timestamp('end_at')->nullable();
+    $table->timestamps();
+});
+
     }
 
     /**

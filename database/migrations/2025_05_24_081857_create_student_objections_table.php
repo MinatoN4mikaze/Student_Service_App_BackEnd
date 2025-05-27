@@ -11,10 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('student_objections', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
-        });
+      Schema::create('student_objections', function (Blueprint $table) {
+    $table->id();
+    $table->foreignId('user_id')->constrained()->onDelete('cascade');
+    $table->foreignId('objection_id')->constrained()->onDelete('cascade');
+    $table->unique(['user_id', 'objection_id']);
+    $table->integer("grade");
+    $table->string("lecturer_name");
+    $table->string("test_hall");
+    $table->string("subject_term");
+    $table->string("subject_year");
+    $table->timestamps();
+});
+
     }
 
     /**
