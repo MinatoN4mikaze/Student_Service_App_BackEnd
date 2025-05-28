@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class StudentObjection extends Model
 {
-        protected $fillable = ['user_id', 'objection_id'];
+        protected $guarded = [];
 
     public function objection()
     {

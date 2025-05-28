@@ -6,8 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Objection extends Model
 {
-     protected $fillable = ['subject_name'];
+      protected $guarded = [];
 
+     //objections have many student suubmissions
     public function studentSubmissions()
     {
         return $this->hasMany(StudentObjection::class);
