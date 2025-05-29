@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 use App\Models\Announcement;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
-
+use App\Models\User;
+use App\Notifications\NewAnnouncementNotification;
 class AnnouncementController extends Controller
 {
     // عرض الإعلانات المتاحة حاليًا
@@ -57,7 +58,11 @@ public function show($id)
         'content' => $request->content,
         'user_id' => $user->id, // ربط الإعلان بالأدمن
     ]);
-
+    //ارسال اشعار لكل المستخدمين
+ $users = User::all();
+    foreach ($users as $u) {
+        $u->notify(new NewAnnouncementNotification($announcement));
+    }
         return response()->json([
             'message' => 'تم انشاء الاعلان بنجاح',
             'announcement' => $announcement
