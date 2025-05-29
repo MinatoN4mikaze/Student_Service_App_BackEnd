@@ -22,6 +22,11 @@ class User extends Authenticatable
     {
          return $this->hasOne(Admin::class);
     }
+          public function announcment()
+    {
+        return $this->hasMany(Announcement::class);
+    }
+
     public function studentObjection()
     {
         return $this->hasMany(StudentObjection::class);
