@@ -10,7 +10,7 @@ class ObjectionController extends Controller
 {
     public function index()
 {
-   
+
     $now = Carbon::now();
 
     //جلب كل الاعتراضات التي وقتها لم ينتته
@@ -48,11 +48,11 @@ if ($count >= 2) {
     ->where('start_at', '<=', Carbon::now())
     ->where('end_at', '>=', Carbon::now())
     ->first();
-    
+
     if (!$objection) {
         return response()->json(['message' => 'هذا الاعتراض غير متاح حاليًا'], 403);
     }
-    
+
     // تحقق أن الطالب لم يقدم اعتراضًا عليه من قبل
     $alreadySubmitted = StudentObjection::where('user_id', $user->id)
         ->where('objection_id', $objectionId)
@@ -66,7 +66,7 @@ if ($count >= 2) {
     $submission = StudentObjection::create([
         'user_id' => $user->id,
         'objection_id' => $objectionId,
- "grade"=>$request->grade,
+        "grade"=>$request->grade,
         'lecturer_name' => $request->lecturer_name,
         'test_hall' => $request->test_hall,
         "subject_term"=>$request->subject_term,
@@ -134,6 +134,6 @@ public function store(Request $request)
         'message' => 'Objection created successfully.',
         'objection' => $objection
     ], 201);
-} 
+}
 
 }
