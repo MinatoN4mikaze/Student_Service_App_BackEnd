@@ -6,6 +6,7 @@ use App\Http\Controllers\ObjectionController;
 use App\Models\Objection;
 use App\Models\User;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ComplaintController;
 
 // Route::get('/user', function (Request $request) {
 //     return $request->user();
@@ -14,6 +15,12 @@ use App\Http\Controllers\AuthController;
 Route::post('/login',[AuthController::class,'login']);
 Route::post('/logout',[AuthController::class,'logout'])->middleware('auth:sanctum');
 
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::get('admin/complaints',[ComplaintController::class,'index']);
+    Route::post('student/complaints',[ComplaintController::class,'store']);
+    Route::delete('admin/complaints/{complaint}',[ComplaintController::class,'destroy']);
+
+});
 
 
 
@@ -21,10 +28,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/objections', [ObjectionController::class, 'index']);
     Route::post('student/objections/{id}/submit', [ObjectionController::class, 'submit']);
     Route::get('admin/objections/submissions', [ObjectionController::class, 'allSubmissions']);
- Route::post('admin/objections', [ObjectionController::class, 'store']);
-
-
-
+    Route::post('admin/objections', [ObjectionController::class, 'store']);
 
 });
 
