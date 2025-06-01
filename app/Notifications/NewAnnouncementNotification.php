@@ -25,7 +25,6 @@ class NewAnnouncementNotification extends Notification
     public function toDatabase($notifiable)
     {
         return [
-            'title' => $this->announcement->title,
             'content' => $this->announcement->content,
             'announcement_id' => $this->announcement->id,
         ];

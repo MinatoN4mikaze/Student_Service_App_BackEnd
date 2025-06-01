@@ -94,7 +94,7 @@ public function allSubmissions()
     $submissions = StudentObjection::with(['user', 'objection'])
         ->orderBy('created_at')
         ->get();
-
+        
     return response()->json($submissions);
 }
 

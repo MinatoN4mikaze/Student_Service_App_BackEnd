@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AnnouncementController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\UserProfileController;
 
 // Route::get('/user', function (Request $request) {
 //     return $request->user();
@@ -32,4 +33,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::delete('admin/announcements/{id}', [AnnouncementController::class, 'destroy']);
       
     Route::get('/notifications', [NotificationController::class, 'notifications']);
+    //روابط بروفايل 
+    Route::get('/profile', [UserProfileController::class, 'show']);
+    Route::post('/profile/update', [UserProfileController::class, 'update']);
 });

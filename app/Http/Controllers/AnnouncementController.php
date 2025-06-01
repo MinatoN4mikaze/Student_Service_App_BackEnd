@@ -20,7 +20,7 @@ class AnnouncementController extends Controller
         // })->get();
     
        $announcements = Announcement::with('user')->orderBy('created_at', 'desc')->get();
-
+$announcements->load('user');
 
         return response()->json($announcements);
     }
@@ -33,7 +33,7 @@ public function show($id)
     if (!$announcement) {
         return response()->json(['message' => 'الإعلان غير موجود'], 404);
     }
-
+$announcement->load('user');
     return response()->json($announcement);
 }
 
@@ -48,13 +48,11 @@ public function show($id)
         }
 
         $request->validate([
-            'title' => 'required|string|max:255',
             'content' => 'required|string',
         
         ]);
 
          $announcement = Announcement::create([
-        'title' => $request->title,
         'content' => $request->content,
         'user_id' => $user->id, // ربط الإعلان بالأدمن
     ]);
@@ -63,6 +61,7 @@ public function show($id)
     foreach ($users as $u) {
         $u->notify(new NewAnnouncementNotification($announcement));
     }
+    $announcement->load('user');
         return response()->json([
             'message' => 'تم انشاء الاعلان بنجاح',
             'announcement' => $announcement
@@ -78,7 +77,6 @@ public function show($id)
     }
 
     $request->validate([
-        'title' => 'required|string|max:255',
         'content' => 'required|string',
     ]);
 //التاكد من وجود اعلان
@@ -88,7 +86,6 @@ public function show($id)
     }
 //تحديث المعلومات
     $announcement->update([
-        'title' => $request->title,
         'content' => $request->content,
     ]);
 
