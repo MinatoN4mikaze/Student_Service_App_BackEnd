@@ -31,6 +31,11 @@ class User extends Authenticatable
     {
         return $this->hasMany(StudentObjection::class);
     }
+
+    public function complaints()
+    {
+    return $this->hasMany(Complaint::class);
+    }
     protected $hidden = [
         'password',
         'remember_token',
