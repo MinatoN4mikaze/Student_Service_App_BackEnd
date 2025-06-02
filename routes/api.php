@@ -38,7 +38,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('admin/announcements', [AnnouncementController::class, 'store']);
     Route::put('admin/announcements/{id}', [AnnouncementController::class, 'update']);
     Route::delete('admin/announcements/{id}', [AnnouncementController::class, 'destroy']);
-      
+      //رابط الاشعارات
     Route::get('/notifications', [NotificationController::class, 'notifications']);
     //روابط بروفايل 
     Route::get('/profile', [UserProfileController::class, 'show']);

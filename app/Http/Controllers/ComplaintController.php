@@ -19,7 +19,9 @@ class ComplaintController extends Controller
         {
             return response()->json(['message'=>' عذرا لا تملك الصلاحيات '],403);
         }
-        $complaints=Complaint::all();
+
+         $complaints = Complaint::with('user')->orderBy('created_at', 'desc')->get();
+$complaints->load("user.student");
         return response()->json(['complaints'=>$complaints]);
     }
 
@@ -30,7 +32,7 @@ class ComplaintController extends Controller
         {
             return response()->json(['message'=>'عذرا لا تملك الصلاحيات لتقديم شكوى'],403);
         }
-        $student_id=$user->student->student_id;
+    
         $fields = $request->validate([
             'subject' => 'required|string|max:255',
             'description' => 'required|string|min:10'
@@ -38,7 +40,7 @@ class ComplaintController extends Controller
 
         Complaint::create(
             [
-                'student_id'=>$student_id,
+                'user_id'=>$user->id,
                 'subject'=>$fields['subject'],
                 'description'=>$fields['description'],
                 ]

@@ -56,12 +56,13 @@ $announcement->load('user');
         'content' => $request->content,
         'user_id' => $user->id, // ربط الإعلان بالأدمن
     ]);
+    $announcement->load('user');
     //ارسال اشعار لكل المستخدمين
  $users = User::all();
     foreach ($users as $u) {
         $u->notify(new NewAnnouncementNotification($announcement));
     }
-    $announcement->load('user');
+    
         return response()->json([
             'message' => 'تم انشاء الاعلان بنجاح',
             'announcement' => $announcement

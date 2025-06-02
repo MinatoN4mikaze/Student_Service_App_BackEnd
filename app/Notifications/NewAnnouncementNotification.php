@@ -27,6 +27,12 @@ class NewAnnouncementNotification extends Notification
         return [
             'content' => $this->announcement->content,
             'announcement_id' => $this->announcement->id,
+             'user' => [
+                'id' => $this->announcement->user->id,
+                'name' => $this->announcement->user->name,
+                // إذا كان هناك صورة 
+                'profile_image' => $this->announcement->user->profile_image,
+            ]
         ];
     }
 

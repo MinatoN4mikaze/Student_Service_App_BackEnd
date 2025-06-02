@@ -72,9 +72,6 @@ if ($count >= 2) {
         "subject_term"=>$request->subject_term,
           "subject_year"=>$request->subject_year,
     ]);
-//تحميل العلاقات
-     $submission->load(['objection', 'user.student']);
-
      return response()->json([
         'message' => 'تم تقديم الاعتراض بنجاح',
         'submission' => $submission,
