@@ -43,4 +43,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
     //روابط بروفايل 
     Route::get('/profile', [UserProfileController::class, 'show']);
     Route::post('/profile/update', [UserProfileController::class, 'update']);
+    //رابط تغيير كلمة السر
+      Route::post('/change-password', [AuthController::class, 'changePassword']);
 });
