@@ -12,6 +12,7 @@ use App\Http\Controllers\AnnouncementController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\UserProfileController;
 use App\Http\Controllers\PollController;
+use App\Http\Controllers\AdminObjectionController;
 
 //روابط تسجيل الدخول و تسجيل الخروج
 Route::post('/login',[AuthController::class,'login']);
@@ -24,6 +25,18 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('student/objections/{id}/submit', [ObjectionController::class, 'submit']);
     Route::get('admin/objections/submissions', [ObjectionController::class, 'allSubmissions']);
     Route::post('admin/objections', [ObjectionController::class, 'store']);
+    Route::get('/objections/subjects', [ObjectionController::class, 'subjectsByYearAndTerm']);
+    Route::post('/objections/dates', [ObjectionController::class, 'datesForSubject']);
+
+    // 1️⃣ حذف طلب الاعتراض
+    Route::delete('/objections/{submissionId}', [AdminObjectionController::class, 'deleteRequest']);
+
+    // 2️⃣ قبول الاعتراض وتحديث العلامة
+    Route::post('/objections/{submissionId}/accept', [AdminObjectionController::class, 'acceptRequest']);
+
+    // 3️⃣ جلب الطلبات المقبولة لمادة معينة
+    Route::get('/objections/accepted', [AdminObjectionController::class, 'acceptedRequestsBySubject']);
+
   //روابط الشكاوي
     Route::get('admin/complaints',[ComplaintController::class,'index']);
     Route::post('student/complaints',[ComplaintController::class,'store']);

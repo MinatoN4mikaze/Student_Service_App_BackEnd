@@ -33,7 +33,7 @@ class AdminPollController extends Controller
      */
     public function store(Request $request)
     {
-        $user=Auth::user();
+        $user = auth('sanctum')->user();
         if($user->role!='admin')
         {
             return response()->json(['message'=>' عذرا لا تملك الصلاحيات '],403);
@@ -47,7 +47,7 @@ class AdminPollController extends Controller
             ]
         );
         $poll=Poll::create([
-             'user_id' => auth()->id(),
+             'user_id' => $user->id,
              'question'=>$validated['question'],
              'ends_at'=>now()->addDays($validated['duration_days']),
         ]);
@@ -69,7 +69,7 @@ class AdminPollController extends Controller
      */
     public function show(string $id)
     {
-        $user=Auth::user();
+        $user = auth('sanctum')->user();
         if($user->role!='admin')
         {
             return response()->json(['message'=>' عذرا لا تملك الصلاحيات '],403);
@@ -102,7 +102,7 @@ class AdminPollController extends Controller
      */
     public function destroy(string $id)
     {
-         $user=Auth::user();
+        $user = auth('sanctum')->user();
         if($user->role!='admin')
         {
             return response()->json(['message'=>' عذرا لا تملك الصلاحيات '],403);
