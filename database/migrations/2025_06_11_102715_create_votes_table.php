@@ -13,11 +13,13 @@ return new class extends Migration
     {
     Schema::create('votes', function (Blueprint $table) {
     $table->id();
+    // الطالب الذي صوّت
     $table->foreignId('user_id')->constrained()->onDelete('cascade');
+    // الخيار الذي تم اختياره
     $table->foreignId('poll_option_id')->constrained()->onDelete('cascade');
     $table->timestamps();
-
-    $table->unique(['student_id', 'poll_option_id']); // منع التصويت مرتين لنفس الخيار
+    // منع التصويت مرتين لنفس الخيار
+    $table->unique(['user_id', 'poll_id']);
 });
 
     }

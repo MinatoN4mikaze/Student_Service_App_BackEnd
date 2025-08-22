@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-       Schema::create('polls', function (Blueprint $table) {
+    Schema::create('polls', function (Blueprint $table) {
     $table->id();
     $table->string('question');
-     $table->foreignId('user_id')->constrained()->onDelete('cascade');
-    $table->integer('duration_days');
+    $table->foreignId('user_id')->constrained()->onDelete('cascade');
+    $table->timestamp('ends_at'); // يخزن التاريخ والوقت (مع timezone إذا تم تمكينه)
     $table->timestamps();
-});
+    });
 
     }
 

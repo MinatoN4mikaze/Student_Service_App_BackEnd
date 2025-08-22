@@ -8,13 +8,20 @@ class Vote extends Model
 {
     //
     protected $guarded = [];
-    
-    public function student() {
-    return $this->belongsTo(Student::class);
-}
 
-public function option() {
-    return $this->belongsTo(PollOption::class, 'poll_option_id');
-}
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function option()
+    {
+        return $this->belongsTo(PollOption::class, 'poll_option_id');
+    }
+
+    public function poll()
+    {
+        return $this->belongsTo(PollOption::class,'poll_option_id');
+    }
 
 }

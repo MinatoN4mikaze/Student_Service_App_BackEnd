@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminPollController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ObjectionController;
@@ -12,7 +13,7 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\UserProfileController;
 use App\Http\Controllers\PollController;
 
-
+//روابط تسجيل الدخول و تسجيل الخروج
 Route::post('/login',[AuthController::class,'login']);
 Route::post('/logout',[AuthController::class,'logout'])->middleware('auth:sanctum');
 
@@ -27,7 +28,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('admin/complaints',[ComplaintController::class,'index']);
     Route::post('student/complaints',[ComplaintController::class,'store']);
     Route::delete('admin/complaints/{complaint}',[ComplaintController::class,'destroy']);
-  
+
     //روابط الاعلانات
     Route::get('/announcements', [AnnouncementController::class, 'index']);
     Route::get('/announcements/{id}', [AnnouncementController::class, 'show']);
@@ -36,16 +37,33 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::delete('admin/announcements/{id}', [AnnouncementController::class, 'destroy']);
       //رابط الاشعارات
     Route::get('/notifications', [NotificationController::class, 'notifications']);
-    //روابط بروفايل 
+    //روابط بروفايل
     Route::get('/profile', [UserProfileController::class, 'show']);
     Route::post('/profile/update', [UserProfileController::class, 'update']);
     //رابط تغيير كلمة السر
       Route::post('/change-password', [AuthController::class, 'changePassword']);
 
       //روابط التصويتات
-    Route::get('/polls', [PollController::class, 'index']);
-    Route::post('admin/polls', [PollController::class, 'store']);
-    Route::post('/polls/{pollId}/vote', [PollController::class, 'vote']);
-    // Route::get('/polls/{pollId}', [PollController::class, 'show']);//لا اعتفد انني نحتاجها
+    // Route::get('/polls', [PollController::class, 'index']);
+    // Route::post('admin/polls', [PollController::class, 'store']);
+    // Route::post('/polls/{pollId}/vote', [PollController::class, 'vote']);
+    // Route::get('/polls/{pollId}', [PollController::class, 'result']);
 
+});
+
+//روابط التصويت
+
+    //الروابط الخاصة بالادمن
+Route::middleware(['auth:sanctum'])->prefix('admin')->group(function () {
+    Route::apiResource('polls', AdminPollController::class);
+
+});
+
+    //الروابط الخاصة بالطلاب
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::get('/polls', [PollController::class, 'index']);
+    Route::get('/polls/{poll}', [PollController::class, 'show']);
+    Route::post('/polls/{poll}/vote', [PollController::class, 'vote']);
+    Route::delete('/polls/{poll}/vote', [PollController::class, 'deleteVote']);
+    Route::get('/polls/{poll}/results', [PollController::class, 'results']);
 });

@@ -11,12 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-       Schema::create('poll_options', function (Blueprint $table) {
+    Schema::create('poll_options', function (Blueprint $table) {
     $table->id();
     $table->foreignId('poll_id')->constrained()->onDelete('cascade');
     $table->string('option_text');
     $table->timestamps();
-});
+    });
 
     }
 

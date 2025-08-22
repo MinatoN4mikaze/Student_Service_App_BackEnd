@@ -21,8 +21,8 @@ class ComplaintController extends Controller
         }
 
          $complaints = Complaint::with('user')->orderBy('created_at', 'desc')->get();
-$complaints->load("user.student");
-        return response()->json(['complaints'=>$complaints]);
+         $complaints->load("user.student");
+         return response()->json(['complaints'=>$complaints]);
     }
 
     public function store(Request $request)
@@ -32,7 +32,7 @@ $complaints->load("user.student");
         {
             return response()->json(['message'=>'عذرا لا تملك الصلاحيات لتقديم شكوى'],403);
         }
-    
+
         $fields = $request->validate([
             'subject' => 'required|string|max:255',
             'description' => 'required|string|min:10'

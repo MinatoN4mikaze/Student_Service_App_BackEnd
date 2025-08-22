@@ -8,12 +8,14 @@ class PollOption extends Model
 {
     //
     protected $guarded = [];
-    public function poll() {
-    return $this->belongsTo(Poll::class);
-}
+    public function poll()
+    {
+        return $this->belongsTo(Poll::class);
+    }
 
-public function votes() {
-    return $this->hasMany(Vote::class);
-}
+    public function votes()
+    {
+        return $this->hasMany(Vote::class);
+    }
 
 }
