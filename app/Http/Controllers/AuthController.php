@@ -20,30 +20,34 @@ class AuthController extends Controller
         {
             return response()->json(['message'=>'المعرف غير موجود'],404);
         }
+
+        if($user->is_active && $request->email!=Null)
+        {
+            return response()->json(['message'=>'الحساب مفعل لا يمكنك إنشاء حساب جديد '],404);
+        }
         if(!$user->is_active)
         {
-            // $commonRules['password_cofirmation']='required|string|same:password';
             $commonRules['email'] = 'required|email|unique:users,email';
         }
         $fields=$request->validate($commonRules);
         if(!$user->is_active)
         {
-            $user->password=$fields['password'];
-            $user->email=$fields['email'];
-            $user->is_active=1;
-            $user->save();
+                $user->password=$fields['password'];
+                $user->email=$fields['email'];
+                $user->is_active=1;
+                $user->save();
 
-            //create Token
-            $user->tokens()->delete();
-            $token = $user->createToken('auth_Token')->plainTextToken;
-            return response()->json([
-            "message" => "تم تفعيل الحساب وتعيين كلمة المرور بنجاح",
-            "User" => $user,
-            "Token" => $token,
-            ], 200);
+                //create Token
+                $user->tokens()->delete();
+                $token = $user->createToken('auth_Token')->plainTextToken;
+                return response()->json([
+                    "message" => "تم تفعيل الحساب وتعيين كلمة المرور بنجاح",
+                    "User" => $user,
+                    "Token" => $token,
+                ], 200);
 
         }
-        //هون سوي اذا كان الايميل غلط
+        //هون سوي اذا كان الباسوورد غلط
         if (!Hash::check($fields['password'], $user->password))
         {
             return response()->json([

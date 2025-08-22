@@ -22,7 +22,7 @@ class User extends Authenticatable
     {
          return $this->hasOne(Admin::class);
     }
-          public function announcment()
+    public function announcment()
     {
         return $this->hasMany(Announcement::class);
     }
@@ -35,6 +35,15 @@ class User extends Authenticatable
     public function complaints()
     {
     return $this->hasMany(Complaint::class);
+    }
+    // لتسهيل الوصول للتصويتات التي أنشأها إذا كان أدمن
+    public function polls()
+    {
+        return $this->hasMany(Poll::class); // Laravel سيفترض المفتاح هو user_id تلقائيًا
+    }
+    public function votes()
+    {
+        return $this->hasMany(Vote::class);
     }
     protected $hidden = [
         'password',
