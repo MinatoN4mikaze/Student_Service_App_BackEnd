@@ -35,6 +35,9 @@ class AdminObjectionController extends Controller
         if ($user->role !== 'admin' && $user->role !== 'student affairs') {
             return response()->json(['message' => 'Unauthorized'], 403);
         }
+        // if ($user->role !== 'admin' && $user->role !== 'student affairs') {
+        //     return response()->json(['message' => 'Unauthorized'], 403);
+        // }
 
         $validator = Validator::make($request->all(), [
             'new_grade' => 'required|numeric|min:0|max:100',
@@ -71,27 +74,33 @@ class AdminObjectionController extends Controller
         if ($user->role !== 'admin' && $user->role !== 'student affairs') {
             return response()->json(['message' => 'Unauthorized'], 403);
         }
-
         $request->validate([
             'subject_name' => 'required|string',
         ]);
 
-        $submissions = StudentObjection::with('user')
-            ->where('subject_name', $request->subject_name)
-            ->where('accepted', true)
-            ->get();
+        $submissions = StudentObjection::with(['user', 'objection'])
+        ->whereHas('objection', function ($query) use ($request) {
+            $query->where('subject_name', $request->subject_name);
+        })
+        ->where('accepted', true)
+        ->get();
 
-        $filtered = $submissions->map(function ($submission) {
-            return [
-                'student_id' => optional($submission->user->student)->student_id ?? null,
-                'name' => $submission->user->name ?? null,
-                'original_grade' => $submission->grade,
-                'new_grade' => $submission->new_grade,
-                'lecturer_name' => $submission->lecturer_name,
-                'test_hall' => $submission->test_hall,
-                'submitted_at' => $submission->created_at->format('Y-m-d'),
-            ];
-        });
+    
+            $filtered = $submissions->map(function ($submission) {
+                return [
+                    'student_id' => optional($submission->user->student)->student_id ?? null,
+                    'name' => $submission->user->name ?? null,
+                    'original_grade' => $submission->grade,
+                    'new_grade' => $submission->new_grade,
+                    'lecturer_name' => $submission->lecturer_name,
+                    'test_hall' => $submission->test_hall,
+                    'subject_name' => optional($submission->objection)->subject_name,
+                    'subject_year' => optional($submission->objection)->subject_year,
+                    'subject_term' => optional($submission->objection)->subject_term,
+                    'submitted_at' => $submission->created_at->format('Y-m-d'),
+                ];
+            });
+            
 
         return response()->json($filtered);
     }
