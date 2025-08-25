@@ -96,7 +96,7 @@ class ObjectionController extends Controller
     public function store(Request $request)
     {
         $user = auth('sanctum')->user();
-        if ($user->role !== 'admin' && $user->role !== 'student affairs') {
+        if ($user->role !== 'admin' ) {
             return response()->json(['message' => 'Unauthorized'], 403);
         }
         $validator = Validator::make($request->all(), [
@@ -210,17 +210,13 @@ class ObjectionController extends Controller
     public function allSubmissions(Request $request)
 {
     $user = auth('sanctum')->user();
-    if ($user->role !== 'admin' && $user->role !== 'student affairs') {
+    if ($user->role !== 'admin') {
         return response()->json(['message' => 'Unauthorized'], 403);
     }
     $request->validate([
         'subject_name' => 'required|string',
     ]);
 
-    // تحقق من صلاحيات الحساب
-    // if ($user->role !== 'admin' && $user->role !== 'student affairs') {
-    //     return response()->json(['message' => 'Unauthorized'], 403);
-    // }
     
 
     // جلب اسم المادة من الرابط ?subject_name=...
@@ -241,6 +237,7 @@ class ObjectionController extends Controller
     // تصفية البيانات حسب الحقول المطلوبة فقط
     $filtered = $submissions->map(function ($submission) {
         return [
+            'id' => $submission->id,
             'student_id' => optional($submission->user->student)->student_id ?? null,
             'name' => $submission->user->name ?? null,
             'grade' => $submission->grade,

@@ -14,7 +14,7 @@ class AdminObjectionController extends Controller
     public function deleteRequest($submissionId)
     {
         $user = auth('sanctum')->user();
-        if ($user->role !== 'admin' && $user->role !== 'student affairs') {
+        if ($user->role !== 'admin') {
             return response()->json(['message' => 'Unauthorized'], 403);
         }
 
@@ -32,7 +32,7 @@ class AdminObjectionController extends Controller
     public function acceptRequest(Request $request, $submissionId)
     {
         $user = auth('sanctum')->user();
-        if ($user->role !== 'admin' && $user->role !== 'student affairs') {
+        if ($user->role !== 'admin') {
             return response()->json(['message' => 'Unauthorized'], 403);
         }
         // if ($user->role !== 'admin' && $user->role !== 'student affairs') {
@@ -71,7 +71,7 @@ class AdminObjectionController extends Controller
     public function acceptedRequestsBySubject(Request $request)
     {
         $user = auth('sanctum')->user();
-        if ($user->role !== 'admin' && $user->role !== 'student affairs') {
+        if ($user->role !== 'admin') {
             return response()->json(['message' => 'Unauthorized'], 403);
         }
         $request->validate([
