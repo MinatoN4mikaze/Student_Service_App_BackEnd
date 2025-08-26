@@ -11,6 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
+        if (!Schema::hasTable('votes')) {
     Schema::create('votes', function (Blueprint $table) {
     $table->id();
     // الطالب الذي صوّت
@@ -21,7 +22,7 @@ return new class extends Migration
     // منع التصويت مرتين لنفس الخيار
     $table->unique(['user_id', 'poll_id']);
 });
-
+        }
     }
 
     /**
