@@ -14,7 +14,7 @@ class AdminPollController extends Controller
     public function index()
 {
     $user = Auth::user();
-
+    
     $polls = Poll::with([
         'options' => function ($q) {
             $q->withCount('votes'); // يضيف عمود votes_count لكل خيار
