@@ -9,13 +9,10 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 
 class ObjectionController extends Controller
-{ public function index(Request $request)
+{ public function index( $subjectName)
     {
-        $request->validate([
-            'subject_name' => 'required|string',
-        ]);
 
-        $objection = Objection::where('subject_name', $request->subject_name)
+        $objection = Objection::where('subject_name', $subjectName)
             ->where('start_at', '<=', now())
             ->where('end_at', '>=', now())
             ->first();
@@ -147,50 +144,46 @@ class ObjectionController extends Controller
         ], 201);
     }
     
-    public function datesForSubject(Request $request)
-    {
-        $request->validate([
-            'subject_name' => 'required|string',
-        ]);
-    
-        // آخر اعتراض مضاف للمادة
-        $objection = \App\Models\Objection::where('subject_name', $request->subject_name)
-            ->latest('created_at')
-            ->first();
-    
-        if (!$objection) {
-            return response()->json(['message' => 'Subject not found'], 404);
-        }
-    
-        $now = Carbon::now();
-        $endDate = Carbon::parse($objection->end_at);
-    
-        $remainingDays = $now->diffInDays($endDate, false);
-    
-        if ($remainingDays <= 0) {
-            $remainingText = "Objection period expired";
-        } else {
-            $weeks = intdiv($remainingDays, 7);
-            $days = $remainingDays % 7;
-    
-            $parts = [];
-            if ($weeks > 0) {
-                $parts[] = "$weeks " . ($weeks === 1 ? 'week' : 'weeks');
-            }
-            if ($days > 0) {
-                $parts[] = "$days " . ($days === 1 ? 'day' : 'days');
-            }
-    
-            $remainingText = implode(' and ', $parts);
-        }
-    
-        return response()->json([
-            'start_at' => $objection->start_at,
-            'end_at' => $objection->end_at,
-            'remaining' => $remainingText,
-        ]);
+    public function datesForSubject($subjectName)
+{
+    // آخر اعتراض مضاف للمادة
+    $objection = \App\Models\Objection::where('subject_name', $subjectName)
+        ->latest('created_at')
+        ->first();
+
+    if (!$objection) {
+        return response()->json(['message' => 'Subject not found'], 404);
     }
-    
+
+    $now = Carbon::now();
+    $endDate = Carbon::parse($objection->end_at);
+
+    $remainingDays = $now->diffInDays($endDate, false);
+
+    if ($remainingDays <= 0) {
+        $remainingText = "Objection period expired";
+    } else {
+        $weeks = intdiv($remainingDays, 7);
+        $days = $remainingDays % 7;
+
+        $parts = [];
+        if ($weeks > 0) {
+            $parts[] = "$weeks " . ($weeks === 1 ? 'week' : 'weeks');
+        }
+        if ($days > 0) {
+            $parts[] = "$days " . ($days === 1 ? 'day' : 'days');
+        }
+
+        $remainingText = implode(' and ', $parts);
+    }
+
+    return response()->json([
+        'start_at' => $objection->start_at,
+        'end_at' => $objection->end_at,
+        'remaining' => $remainingText,
+    ]);
+}
+
     
     public function subjectsByYearAndTerm(Request $request)
     {
@@ -207,23 +200,11 @@ class ObjectionController extends Controller
     
         return response()->json(['subjects' => $subjects]);
     }
-    public function allSubmissions(Request $request)
+    public function allSubmissions($subjectName)
 {
     $user = auth('sanctum')->user();
     if ($user->role !== 'admin') {
         return response()->json(['message' => 'Unauthorized'], 403);
-    }
-    $request->validate([
-        'subject_name' => 'required|string',
-    ]);
-
-    
-
-    // جلب اسم المادة من الرابط ?subject_name=...
-    $subjectName = $request->subject_name;
-
-    if (!$subjectName) {
-        return response()->json(['message' => 'اسم المادة مطلوب'], 400);
     }
 
     // جلب الاعتراضات المرتبطة بهذه المادة فقط عبر العلاقة مع جدول objections
@@ -252,6 +233,7 @@ class ObjectionController extends Controller
 
     return response()->json($filtered);
 }
+
 
 
 }    

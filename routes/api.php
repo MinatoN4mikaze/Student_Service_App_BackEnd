@@ -21,18 +21,18 @@ Route::post('/logout',[AuthController::class,'logout'])->middleware('auth:sanctu
 
 Route::middleware(['auth:sanctum'])->group(function () {
    //روابط الاعتراض
-    Route::post('/objections', [ObjectionController::class, 'index']);
+    Route::get('/objections/{subjectName}', [ObjectionController::class, 'index']);
     Route::post('student/objections/submit', [ObjectionController::class, 'submit']);
-    Route::post('admin/objections/submissions', [ObjectionController::class, 'allSubmissions']);
+    Route::get('admin/objections/submissions/{subjectName}', [ObjectionController::class, 'allSubmissions']);
     Route::post('admin/objections', [ObjectionController::class, 'store']);
-    Route::post('/objections/subjects', [ObjectionController::class, 'subjectsByYearAndTerm']);
-    Route::post('/objections/dates', [ObjectionController::class, 'datesForSubject']);
+    Route::get('/objections/subjects', [ObjectionController::class, 'subjectsByYearAndTerm']);
+    Route::get('/objections/dates/{subjectName}', [ObjectionController::class, 'datesForSubject']);
     // 1️⃣ حذف طلب الاعتراض
     Route::delete('/objections/{submissionId}', [AdminObjectionController::class, 'deleteRequest']);
     // 2️⃣ قبول الاعتراض وتحديث العلامة
     Route::post('/objections/{submissionId}/accept', [AdminObjectionController::class, 'acceptRequest']);
     // 3️⃣ جلب الطلبات المقبولة لمادة معينة
-    Route::post('/objections/accepted', [AdminObjectionController::class, 'acceptedRequestsBySubject']);
+    Route::get('/objections/{subjectName}/accepted', [AdminObjectionController::class, 'acceptedRequestsBySubject']);
 
   //روابط الشكاوي
     Route::get('admin/complaints',[ComplaintController::class,'index']);
