@@ -200,12 +200,11 @@ class ObjectionController extends Controller
     
         return response()->json(['subjects' => $subjects]);
     }
+
+    
     public function allSubmissions($subjectName)
 {
     $user = auth('sanctum')->user();
-    if ($user->role !== 'admin') {
-        return response()->json(['message' => 'Unauthorized'], 403);
-    }
 
     // جلب الاعتراضات المرتبطة بهذه المادة فقط عبر العلاقة مع جدول objections
     $submissions = StudentObjection::with(['user', 'objection'])

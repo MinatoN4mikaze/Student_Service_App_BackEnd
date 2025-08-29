@@ -21,11 +21,11 @@ Route::post('/logout',[AuthController::class,'logout'])->middleware('auth:sanctu
 
 Route::middleware(['auth:sanctum'])->group(function () {
    //روابط الاعتراض
+   Route::get('/objections/subjects', [ObjectionController::class, 'subjectsByYearAndTerm']);
     Route::get('/objections/{subjectName}', [ObjectionController::class, 'index']);
     Route::post('student/objections/submit', [ObjectionController::class, 'submit']);
     Route::get('admin/objections/submissions/{subjectName}', [ObjectionController::class, 'allSubmissions']);
     Route::post('admin/objections', [ObjectionController::class, 'store']);
-    Route::get('/objections/subjects', [ObjectionController::class, 'subjectsByYearAndTerm']);
     Route::get('/objections/dates/{subjectName}', [ObjectionController::class, 'datesForSubject']);
     // 1️⃣ حذف طلب الاعتراض
     Route::delete('/objections/{submissionId}', [AdminObjectionController::class, 'deleteRequest']);
