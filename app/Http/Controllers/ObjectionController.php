@@ -201,16 +201,16 @@ class ObjectionController extends Controller
         return response()->json(['subjects' => $subjects]);
     }
 
-    
-    public function allSubmissions($subjectName)
+public function allSubmissions($subjectName)
 {
     $user = auth('sanctum')->user();
 
-    // جلب الاعتراضات المرتبطة بهذه المادة فقط عبر العلاقة مع جدول objections
+    // جلب الاعتراضات المرتبطة بهذه المادة فقط واللي accepted = 0
     $submissions = StudentObjection::with(['user', 'objection'])
         ->whereHas('objection', function ($query) use ($subjectName) {
             $query->where('subject_name', $subjectName);
         })
+        ->where('accepted', false) 
         ->orderBy('created_at')
         ->get();
 
